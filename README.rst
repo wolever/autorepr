@@ -29,7 +29,7 @@ except they accept only a format string, not a list.
     ...
     >>> p = Person()
     >>> repr(p)
-    '<__main__.Person name='Alex' 0x...>'
+    '<__main__.Person name="Alex" 0x...>'
     >>> str(p)
     'Alex'
     >>> unicode(p)
@@ -72,4 +72,20 @@ This works with ``autorepr``'s list mode too:
     ...                          len=lambda self: len(self.name))
     ...
     >>> repr_with_len(p)
-    '<__main__.Person name='Alex' len=4 0x...>'
+    '<__main__.Person name="Alex" len=4 0x...>'
+
+If a regular format string is passed to ``autorepr``, it will use that instead
+of the generated string:
+
+.. code:: python
+
+    >>> repr_with_str = autorepr("{self.name}")
+    >>> repr_with_str(p)
+    '<__main__.Person "Alex" 0x...>'
+
+And of course, if you don't want your ``__repr__`` to be wrapped in
+``<ClassName ...>``, you can use ``autostr``:
+
+    >>> repr_with_autostr = autostr("Person({self.name!r})")
+    >>> repr_with_autostr(p)
+    'Person("Alex")'
