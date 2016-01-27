@@ -35,9 +35,8 @@ except they accept only a format string, not a list.
     >>> unicode(p)
     u'Alex'
 
-The ``autostr`` and ``autounicode`` functions will also be intelligent about
-converting their input to / from unicode (encoding / decoding as UTF-8) as
-necessary:
+The ``autostr`` and ``autounicode`` functions are intelligent about converting
+their input to/from unicode (decoding/encoding as UTF-8) as necessary:
 
 .. code:: python
 
@@ -85,6 +84,8 @@ of the generated string:
 
 And of course, if you don't want your ``__repr__`` to be wrapped in
 ``<ClassName ...>``, you can use ``autostr``:
+
+.. code:: python
 
     >>> repr_with_autostr = autostr("Person({self.name!r})")
     >>> repr_with_autostr(p)

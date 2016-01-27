@@ -18,3 +18,4 @@ misc/
 dist/
 Icon?
 node_modules/
+build/
