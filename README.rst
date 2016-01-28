@@ -1,9 +1,6 @@
 ``autorepr``: makes civilized string representations
 ====================================================
 
-Why ``autorepr``?
------------------
-
 Python makes it easy to make a class, but annoying to specify how that class is
 represented as a string. Did you forget to reference ``self`` again? Probably.
 Did you just spend an hour trying to remember how to handle unicode? Almost
@@ -13,8 +10,8 @@ certainly.
 methods in a single line each. They'll let you see any number of attributes,
 just the way you want to see them.
 
-With ``autorepr``, you get the information you want, while it handles the hard
-work (like encoding and decoding), leaving you to focus on your project.
+With ``autorepr``, you get the repers you want, without worrying about the
+fiddly bits (like encoding and decoding), leaving you to focus on your project.
 
 
 Installation
@@ -64,10 +61,10 @@ their input to/from unicode (decoding/encoding as UTF-8) as necessary:
 
 *Note*: ``autostr`` and ``autorepr`` won't crash on invalid UTF-8 (for example,
 if ``autounicode`` is asked to turn binary data into unicode), but the result
-is *undefined* and may not be desierable.
+is *undefined* and may not be desirable.
 
 Additional properties can be passed in as kwargs, which will be called with
-the instance as a paramter:
+the instance as a parameter:
 
 .. code:: python
 
