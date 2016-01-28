@@ -1,18 +1,28 @@
-``autorepr``: easily implement ``__repr__``, ``__str__``, and ``__unicode__``
+``reprimend``: making civilized string representations
 =============================================================================
+
+Why ``reprimend``?
+-----------------
+
+Python makes it easy to make a class, but annoying to specify how that class is represented as a string. Did you forget to reference ``self`` again? Probably. Did you just spend an hour trying to remember how to handle unicode? Almost certainly.
+
+``reprimend`` lets you customize ``__repr__``, ``__str__``, and ``__unicode__`` methods in a single line each. They'll let you see any number of attributes, just the way you want to see them. 
+
+With ``reprimend``, you get the information you want, while it handles the hard work (like encoding and decoding), leaving you to focus on your project.
+
 
 Installation
 ------------
 
 ::
 
-    $ pip install autorepr
+    $ pip install reprimend
 
 
 Usage
 -----
 
-The ``autorepr`` function can be used to build a Python-esque ``__repr__``
+``reprimend`` consists of three functions. The ``autorepr`` function can be used to build a Python-esque ``__repr__``
 string by passing either a ``str.format``-style string which will be formatted
 with ``self``, or a list of attributes which should be included in a
 ``name=value`` list. The ``autostr`` and ``autounicode`` functions are similar,
