@@ -34,7 +34,7 @@ to avoid Unicode encoding / decoding errors.
 .. code:: python
 
     >>> class Person(object):
-    ...     name = "Alex"
+    ...     name = u"Alex ☃"
     ...
     ...     __repr__ = autorepr(["name"])
     ...     __str__ = autostr("{self.name}")
@@ -43,21 +43,26 @@ to avoid Unicode encoding / decoding errors.
     >>> p = Person()
     >>> repr(p)
     '<__main__.Person name="Alex" 0x...>'
-    >>> str(p)
-    'Alex'
     >>> unicode(p)
-    u'Alex'
+    u'Alex ☃'
+    >>> str(p)
+    'Alex \xe2\x98\x83'
 
-The ``autostr`` and ``autounicode`` functions are intelligent about converting
+Notice that ``autostr`` and ``autounicode`` are intelligent about converting
 their input to/from unicode (decoding/encoding as UTF-8) as necessary:
 
 .. code:: python
 
-    >>> p.name = u"☃"
+    >>> p.name = u"unicode ☃"
     >>> unicode(p)
-    u'☃'
+    u'unicode: ☃'
     >>> str(p)
-    '\xe2\x98\x83'
+    'unicode: \xe2\x98\x83'
+    >>> p.name = 'utf-8 bytes \xe2\x98\x83'
+    >>> unicode(p)
+    u'utf-8 bytes: ☃'
+    >>> str(p)
+    'utf-8 bytes: \xe2\x98\x83'
 
 *Note*: ``autostr`` and ``autorepr`` won't crash on invalid UTF-8 (for example,
 if ``autounicode`` is asked to turn binary data into unicode), but the result
