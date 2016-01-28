@@ -35,7 +35,6 @@ def to_str(obj, encoding='utf-8', **encode_args):
 
     return str(obj)
 
-
 def to_unicode(obj, encoding='utf-8', fallback='latin1', **decode_args):
     r"""
     Returns a ``unicode`` of ``obj``, decoding using ``encoding`` if necessary.
@@ -72,8 +71,6 @@ def to_unicode(obj, encoding='utf-8', fallback='latin1', **decode_args):
     except UnicodeDecodeError:
         return unicode(obj_str, fallback, **decode_args)
 
-
-
 class SafeFormatter(string.Formatter):
     def __init__(self, coerce_func):
         self.coerce_func = coerce_func
@@ -83,10 +80,8 @@ class SafeFormatter(string.Formatter):
         res = string.Formatter.format_field(self, value, format_spec)
         return self.coerce_func(res)
 
-
 safe_str_formatter = SafeFormatter(to_str)
 safe_unicode_formatter = SafeFormatter(to_unicode)
-
 
 def _autofmthelper(name, fmt, result_type, extra, postprocess=None):
     if isinstance(fmt, types.FunctionType):
@@ -186,6 +181,7 @@ def autorepr(fmt, **kwargs):
             id(self),
         )
     ))
+
 
 if __name__ == "__main__":
     import doctest
