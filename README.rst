@@ -1,14 +1,20 @@
-``reprimend``: making civilized string representations
-=============================================================================
+``autorepr``: makes civilized string representations
+====================================================
 
-Why ``reprimend``?
+Why ``autorepr``?
 -----------------
 
-Python makes it easy to make a class, but annoying to specify how that class is represented as a string. Did you forget to reference ``self`` again? Probably. Did you just spend an hour trying to remember how to handle unicode? Almost certainly.
+Python makes it easy to make a class, but annoying to specify how that class is
+represented as a string. Did you forget to reference ``self`` again? Probably.
+Did you just spend an hour trying to remember how to handle unicode? Almost
+certainly.
 
-``reprimend`` lets you customize ``__repr__``, ``__str__``, and ``__unicode__`` methods in a single line each. They'll let you see any number of attributes, just the way you want to see them. 
+``autorepr`` lets you customize ``__repr__``, ``__str__``, and ``__unicode__``
+methods in a single line each. They'll let you see any number of attributes,
+just the way you want to see them.
 
-With ``reprimend``, you get the information you want, while it handles the hard work (like encoding and decoding), leaving you to focus on your project.
+With ``autorepr``, you get the information you want, while it handles the hard
+work (like encoding and decoding), leaving you to focus on your project.
 
 
 Installation
@@ -16,17 +22,17 @@ Installation
 
 ::
 
-    $ pip install reprimend
+    $ pip install autorepr
 
 
 Usage
 -----
 
-``reprimend`` consists of three functions. The ``autorepr`` function can be used to build a Python-esque ``__repr__``
-string by passing either a ``str.format``-style string which will be formatted
-with ``self``, or a list of attributes which should be included in a
-``name=value`` list. The ``autostr`` and ``autounicode`` functions are similar,
-except they accept only a format string, not a list.
+``autorepr`` consists of three functions. ``autorepr`` builds a Python-esque
+``__repr__`` string by passing either a ``str.format``-style string, or a list
+of attributes which should be included in a ``name=value`` list. The
+``autostr`` and ``autounicode`` functions are similar, and will do their best
+to avoid Unicode encoding / decoding errors.
 
 .. code:: python
 
@@ -59,7 +65,6 @@ their input to/from unicode (decoding/encoding as UTF-8) as necessary:
 *Note*: ``autostr`` and ``autorepr`` won't crash on invalid UTF-8 (for example,
 if ``autounicode`` is asked to turn binary data into unicode), but the result
 is *undefined* and may not be desierable.
-
 
 Additional properties can be passed in as kwargs, which will be called with
 the instance as a paramter:

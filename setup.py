@@ -18,7 +18,7 @@ setup(
     url="https://github.com/wolever/autorepr",
     author="David Wolever",
     author_email="david@wolever.net",
-    description="Easily implement __repr__, __str__, and __unicode__ methods",
+    description="Makes civilized __repr__, __str__, and __unicode__ methods",
     long_description=long_description,
     py_modules=["autorepr"],
     install_requires=[],
