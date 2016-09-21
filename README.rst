@@ -42,7 +42,7 @@ to avoid Unicode encoding / decoding errors.
     ...
     >>> p = Person()
     >>> repr(p)
-    '<__main__.Person name="Alex" 0x...>'
+    "<__main__.Person name=u'Alex \u2603' 0x...>"
     >>> unicode(p)
     u'Alex ☃'
     >>> str(p)
