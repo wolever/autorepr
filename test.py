@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+
+import os
 import doctest
 
 from nose.tools import assert_equal
@@ -44,3 +46,12 @@ def test_autorepr(expected, func):
 def test_with_function_as_input():
     f = autounicode(autostr("{self.name} {foo}", foo=lambda x: 42))
     assert_equal(f(ascii), "Alex 42")
+
+def test_readme_doctests():
+    res = doctest.testfile("README.rst", optionflags=doctest.ELLIPSIS, encoding="utf-8")
+    assert_equal(res.failed, 0)
+
+
+if __name__ == '__main__':
+    import nose
+    nose.run(argv=[__file__])

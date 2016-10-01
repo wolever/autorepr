@@ -14,7 +14,7 @@ except IOError:
 
 setup(
     name="autorepr",
-    version="0.1.1",
+    version="0.2.0",
     url="https://github.com/wolever/autorepr",
     author="David Wolever",
     author_email="david@wolever.net",

@@ -155,6 +155,12 @@ def autorepr(fmt, **kwargs):
         ...
         >>> repr(Person())
         "<__main__.Person name='Alex' at 0x...>"
+        >>> class Timestamp(object):
+        ...     time = 123.456
+        ...     __repr__ = autorepr(["time:0.01f"])
+        ...
+        >>> repr(Timestamp())
+        '<__main__.Timestamp time=123.5 at 0x...>'
         >>>
         >>> class Animal(object):
         ...     name = "Puppy"
@@ -168,11 +174,21 @@ def autorepr(fmt, **kwargs):
         >>>
         """
     if isinstance(fmt, list):
-        name_attr = lambda n: n if n in kwargs else "self.%s" %(n, )
-        fmt = " ".join(
-            "%s={%s!r}" %(name, name_attr(name))
-            for name in fmt
-        )
+        fmt_bits = []
+        for name in fmt:
+            attr, _, fmt_spec = name.partition(":")
+            attr, _, fmt_conv = attr.partition("!")
+            fmt_suffix = (
+                ":%s" %(fmt_spec, ) if fmt_spec else
+                "!%s" %(fmt_conv or "r", )
+            )
+            fmt_bits.append("%s={%s%s}" %(
+                attr,
+                attr if attr in kwargs else "self.%s" %(attr, ),
+                fmt_suffix,
+            ))
+        fmt = " ".join(fmt_bits)
+
     return _autofmthelper("__repr__", fmt, repr, kwargs, lambda self, result: (
         "<%s.%s %s at 0x%x>" %(
             self.__class__.__module__,

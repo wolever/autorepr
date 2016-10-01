@@ -33,36 +33,39 @@ to avoid Unicode encoding / decoding errors.
 
 .. code:: python
 
+    >>> from autorepr import autorepr, autostr, autounicode
     >>> class Person(object):
     ...     name = u"Alex ☃"
+    ...     height = 123.456
     ...
-    ...     __repr__ = autorepr(["name"])
-    ...     __str__ = autostr("{self.name}")
+    ...     __repr__ = autorepr(["name", "height:0.1f"])
+    ...     __str__ = autostr("{self.name} ({self.height:0.0f} cm)")
     ...     __unicode__ = autounicode(__str__)
     ...
     >>> p = Person()
     >>> repr(p)
-    "<__main__.Person name=u'Alex \u2603' 0x...>"
+    "<__main__.Person name=u'Alex \\u2603' height=123.5 at 0x...>"
     >>> unicode(p)
-    u'Alex ☃'
+    u'Alex \u2603 (123 cm)'
     >>> str(p)
-    'Alex \xe2\x98\x83'
+    'Alex \xe2\x98\x83 (123 cm)'
+
 
 Notice that ``autostr`` and ``autounicode`` are intelligent about converting
 their input to/from unicode (decoding/encoding as UTF-8) as necessary:
 
 .. code:: python
 
-    >>> p.name = u"unicode ☃"
+    >>> p.name = u"unicode: ☃"
     >>> unicode(p)
-    u'unicode: ☃'
+    u'unicode: \u2603 (123 cm)'
     >>> str(p)
-    'unicode: \xe2\x98\x83'
-    >>> p.name = 'utf-8 bytes \xe2\x98\x83'
+    'unicode: \xe2\x98\x83 (123 cm)'
+    >>> p.name = 'utf-8 bytes: \xe2\x98\x83'
     >>> unicode(p)
-    u'utf-8 bytes: ☃'
+    u'utf-8 bytes: \u2603 (123 cm)'
     >>> str(p)
-    'utf-8 bytes: \xe2\x98\x83'
+    'utf-8 bytes: \xe2\x98\x83 (123 cm)'
 
 *Note*: ``autostr`` and ``autorepr`` won't crash on invalid UTF-8 (for example,
 if ``autounicode`` is asked to turn binary data into unicode), but the result
@@ -88,16 +91,16 @@ This works with ``autorepr``'s list mode too:
     ...                          len=lambda self: len(self.name))
     ...
     >>> repr_with_len(p)
-    '<__main__.Person name="Alex" len=4 0x...>'
+    "<__main__.Person name='Alex' len=4 at 0x...>"
 
 If a regular format string is passed to ``autorepr``, it will use that instead
 of the generated string:
 
 .. code:: python
 
-    >>> repr_with_str = autorepr("{self.name}")
+    >>> repr_with_str = autorepr("{self.name!r}")
     >>> repr_with_str(p)
-    '<__main__.Person "Alex" 0x...>'
+    "<__main__.Person 'Alex' at 0x...>"
 
 And of course, if you don't want your ``__repr__`` to be wrapped in
 ``<ClassName ...>``, you can use ``autostr``:
@@ -106,4 +109,17 @@ And of course, if you don't want your ``__repr__`` to be wrapped in
 
     >>> repr_with_autostr = autostr("Person({self.name!r})")
     >>> repr_with_autostr(p)
-    'Person("Alex")'
+    "Person('Alex')"
+
+
+Format specifications can also be passed to ``autorepr`` if the default of
+``!r`` is undesierable (for example, turncating floats):
+
+.. code:: python
+
+    >>> with_fmt_spec = autorepr(["duration:0.1f", "addr:x", "type!s"],
+    ...                          duration=lambda x: 123.456,
+    ...                          addr=lambda x: 0xabc123,
+    ...                          type=lambda x: "foo")
+    >>> with_fmt_spec(None)
+    '<__builtin__.NoneType duration=123.5 addr=abc123 type=foo at 0x...>'
