@@ -122,4 +122,4 @@ Format specifications can also be passed to ``autorepr`` if the default of
     ...                          addr=lambda x: 0xabc123,
     ...                          type=lambda x: "foo")
     >>> with_fmt_spec(None)
-    '<__builtin__.NoneType duration=123.5 addr=abc123 type=foo at 0x...>'
+    '<....NoneType duration=123.5 addr=abc123 type=foo at 0x...>'

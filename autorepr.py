@@ -154,13 +154,13 @@ def autorepr(fmt, **kwargs):
         ...     __repr__ = autorepr(["name"])
         ...
         >>> repr(Person())
-        "<__main__.Person name='Alex' at 0x...>"
+        "<autorepr.Person name='Alex' at 0x...>"
         >>> class Timestamp(object):
         ...     time = 123.456
         ...     __repr__ = autorepr(["time:0.01f"])
         ...
         >>> repr(Timestamp())
-        '<__main__.Timestamp time=123.5 at 0x...>'
+        '<autorepr.Timestamp time=123.5 at 0x...>'
         >>>
         >>> class Animal(object):
         ...     name = "Puppy"
@@ -170,7 +170,7 @@ def autorepr(fmt, **kwargs):
         ...     )
         ...
         >>> repr(Animal())
-        "<__main__.Animal name='Puppy' name_len=5 at 0x...>"
+        "<autorepr.Animal name='Puppy' name_len=5 at 0x...>"
         >>>
         """
     if isinstance(fmt, list):
