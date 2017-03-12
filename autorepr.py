@@ -1,5 +1,11 @@
 import types
 import string
+# Python 3 compatibility hack
+try:
+    unicode('')
+except NameError:
+    unicode = str
+
 
 
 def to_str(obj, encoding='utf-8', **encode_args):
@@ -197,8 +203,3 @@ def autorepr(fmt, **kwargs):
             id(self),
         )
     ))
-
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod(optionflags=doctest.ELLIPSIS)
