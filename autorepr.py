@@ -114,10 +114,12 @@ class SafeFormatter(string.Formatter):
         res = string.Formatter.format_field(self, value, format_spec)
         return self.coerce_func(res)
 
+
 class MagicBytesFormatter(string.Formatter):
     def format_field(self, value, format_spec):
         value = to_text(value)
         return string.Formatter.format_field(self, value, format_spec)
+
 
 safe_bytes_formatter = SafeFormatter(to_bytes)
 safe_text_formatter = SafeFormatter(to_text)
@@ -139,17 +141,18 @@ def _autofmthelper(name, fmt, result_type, extra, postprocess=None):
         fmt = bytes(fmt) if PY2 else text(fmt)
 
     def fmtfunc(self):
-        kwargs = extra and dict((k, v(self)) for (k, v) in extra.items())
+        kwargs = dict((k, v(self)) for (k, v) in extra.items())
+        kwargs["self"] = self
         if name == "__bytes__":
-            result = magic_bytes_formatter.format(fmt, self=self, **kwargs)
+            result = magic_bytes_formatter.vformat(fmt, (), kwargs)
             result = to_bytes(result)
         else:
             try:
-                result = fmt.format(self=self, **kwargs)
+                result = fmt.format(**kwargs)
             except UnicodeError:
                 if safe_formatter is None:
                     raise
-                result = safe_formatter.format(fmt, self=self, **kwargs)
+                result = safe_formatter.vformat(fmt, (), kwargs)
         if postprocess is not None:
             result = postprocess(self, result)
         return result
