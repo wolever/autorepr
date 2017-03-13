@@ -19,3 +19,5 @@ dist/
 Icon?
 node_modules/
 build/
+.tox/
+.cache/

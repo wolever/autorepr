@@ -1,17 +1,43 @@
 ``autorepr``: makes civilized string representations
 ====================================================
 
+.. image:: https://travis-ci.org/wolever/autorepr.svg?branch=master
+    :target: https://travis-ci.org/wolever/autorepr
+
+Now with Python 3 support!
+
+Overview
+--------
+
 Python makes it easy to make a class, but annoying to specify how that class is
 represented as a string. Did you forget to reference ``self`` again? Probably.
 Did you just spend an hour trying to remember how to handle unicode? Almost
 certainly.
 
-``autorepr`` lets you customize ``__repr__``, ``__str__``, and ``__unicode__``
-methods in a single line each. They'll let you see any number of attributes,
-just the way you want to see them.
+``autorepr`` lets you customize ``__repr__``, ``__str__``, ``__unicode__``, and
+``__bytes__`` methods in a single line each. They'll let you see any number of
+attributes, just the way you want to see them.
 
 With ``autorepr``, you get the repers you want, without worrying about the
 fiddly bits (like encoding and decoding), leaving you to focus on your project.
+
+.. code:: python
+
+    >>> from autorepr import autorepr, autotext
+    >>> class Person(object):
+    ...     name = u"Alex ☃"
+    ...     height = 123.456
+    ...
+    ...     __repr__ = autorepr(["name", "height:0.1f"])
+    ...     __str__, __unicode__ = autotext("{self.name} ({self.height:0.0f} cm)")
+    ...
+    >>> p = Person()
+    >>> repr(p)
+    "<__main__.Person name=u'Alex \\u2603' height=123.5 at 0x...>"
+    >>> unicode(p)
+    u'Alex \u2603 (123 cm)'
+    >>> str(p)
+    'Alex \xe2\x98\x83 (123 cm)'
 
 
 Installation
@@ -25,22 +51,33 @@ Installation
 Usage
 -----
 
-``autorepr`` consists of three functions. ``autorepr`` builds a Python-esque
-``__repr__`` string by passing either a ``str.format``-style string, or a list
-of attributes which should be included in a ``name=value`` list. The
-``autostr`` and ``autounicode`` functions are similar, and will do their best
-to avoid Unicode encoding / decoding errors.
+``autorepr`` consists of two main functions:
+
+- ``autorepr`` builds a Python-esque ``__repr__`` string by passing either a
+  ``str.format``-style string, or a list of attributes which should be included
+  in a ``name=value`` list.
+
+- ``autotext``, which uses ``autostr`` and ``autounicode`` to create
+  ``__str__`` and ``__unicode__`` methods in a Python 2 + 3 friendly way.
+
+And three secondary functions: ``autostr``, ``autounicode``, and ``autobytes``,
+which build ``__str__``, ``__unicode__``, and ``__bytes__`` functions,
+respectively. The functions will do their best to avoid Unicode encoding /
+decoding errors, and will generally Do The Right Thing, even if the inputs
+aren't necessarily sensible.
+
+Note: the examples shown here are Python 2, but everything will work equally
+well with Python 3.
 
 .. code:: python
 
-    >>> from autorepr import autorepr, autostr, autounicode
+    >>> from autorepr import autorepr, autotext, autostr, autounicode
     >>> class Person(object):
     ...     name = u"Alex ☃"
     ...     height = 123.456
     ...
     ...     __repr__ = autorepr(["name", "height:0.1f"])
-    ...     __str__ = autostr("{self.name} ({self.height:0.0f} cm)")
-    ...     __unicode__ = autounicode(__str__)
+    ...     __str__, __unicode__ = autotext("{self.name} ({self.height:0.0f} cm)")
     ...
     >>> p = Person()
     >>> repr(p)
@@ -51,8 +88,9 @@ to avoid Unicode encoding / decoding errors.
     'Alex \xe2\x98\x83 (123 cm)'
 
 
-Notice that ``autostr`` and ``autounicode`` are intelligent about converting
-their input to/from unicode (decoding/encoding as UTF-8) as necessary:
+Notice that ``autostr`` and ``autorepr`` (as called here through ``autotext``)
+are intelligent about converting to/from unicode (decoding/encoding as UTF-8)
+as necessary:
 
 .. code:: python
 
@@ -71,7 +109,7 @@ their input to/from unicode (decoding/encoding as UTF-8) as necessary:
 if ``autounicode`` is asked to turn binary data into unicode), but the result
 is *undefined* and may not be desirable.
 
-Additional properties can be passed in as kwargs, which will be called with
+Additional properties can be passed in as ``kwargs``, which will be called with
 the instance as a parameter:
 
 .. code:: python
@@ -113,7 +151,7 @@ And of course, if you don't want your ``__repr__`` to be wrapped in
 
 
 Format specifications can also be passed to ``autorepr`` if the default of
-``!r`` is undesierable (for example, turncating floats):
+``!r`` is undesirable (for example, truncating floats):
 
 .. code:: python
 
