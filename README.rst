@@ -9,17 +9,18 @@ Now with Python 3 support!
 Overview
 --------
 
-Python makes it easy to make a class, but annoying to specify how that class is
-represented as a string. Did you forget to reference ``self`` again? Probably.
-Did you just spend an hour trying to remember how to handle unicode? Almost
-certainly.
+Python makes classes easy, but ``__repr__`` methods hard. Did you forget to
+reference ``self`` again? Probably. Did have you thought to yourself "eh, this
+class is real simple, it doesn't need a repr"? Without a doubt. Was production
+taken down three times last week because your ``__str__`` returned unicode? ...
+no? Maybe that's just me.
 
-``autorepr`` lets you customize ``__repr__``, ``__str__``, ``__unicode__``, and
-``__bytes__`` methods in a single line each. They'll let you see any number of
-attributes, just the way you want to see them.
+``autorepr`` makes it simple to build expressive, safe, and correct,
+``__repr__``, ``__str__``, ``__unicode__``, and ``__bytes__`` methods in a
+single line each.
 
 With ``autorepr``, you get the repers you want, without worrying about the
-fiddly bits (like encoding and decoding), leaving you to focus on your project.
+fiddly bits (like encoding and decoding), leaving you to focus on your project:
 
 .. code:: python
 
@@ -51,23 +52,32 @@ Installation
 Usage
 -----
 
-``autorepr`` consists of two main functions:
+``autorepr`` exposes two main functions:
 
-- ``autorepr`` builds a Python-esque ``__repr__`` string by passing either a
-  ``str.format``-style string, or a list of attributes which should be included
-  in a ``name=value`` list.
+- ``autorepr``, which builds a Python-esque ``__repr__`` string by passing
+  either a ``str.format``-style string, or a list of attributes which should be
+  included in a ``name=value`` list::
+
+    autorepr(["name", "height:0.1f"]) -->
+        "<pkg.Person name=u'Alex \u2603' height=123.5 at 0x...>"
+    autorepr("{self.id} name={self.name!r}") -->
+        "<pkg.Person 123 name=u'Alex \u2603' at 0x...>"
 
 - ``autotext``, which uses ``autostr`` and ``autounicode`` to create
-  ``__str__`` and ``__unicode__`` methods in a Python 2 + 3 friendly way.
+  ``__str__`` and ``__unicode__`` methods in a Python 2 + 3 friendly way::
 
-And three secondary functions: ``autostr``, ``autounicode``, and ``autobytes``,
-which build ``__str__``, ``__unicode__``, and ``__bytes__`` functions,
-respectively. The functions will do their best to avoid Unicode encoding /
-decoding errors, and will generally Do The Right Thing, even if the inputs
-aren't necessarily sensible.
+    __str__, __unicode__ = autotext("{self.name} ({self.height!d} cm)") -->
+        str: 'Alex \xe2\x98\x83 (123cm)'
+        unicode: u'Alex \u2603 (123cm)'
 
-Note: the examples shown here are Python 2, but everything will work equally
-well with Python 3.
+And three secondary functions - ``autostr``, ``autounicode``, and
+``autobytes`` - which build ``__str__``, ``__unicode__``, and ``__bytes__``
+functions, respectively. The functions will do their best to avoid Unicode
+encoding / decoding errors, and will generally Do The Right Thing, even if the
+inputs aren't necessarily sensible.
+
+Note: the examples shown here are Python 2, but everything works equally well
+under Python 3.
 
 .. code:: python
 
